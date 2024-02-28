@@ -1,0 +1,31 @@
+:root {
+    --theme-color-background: #d9d9d9;
+    --theme-color-font: #000;
+
+    font-family: Roboto, system-ui, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-size: 1rem;
+    font-weight: 400;
+
+    color-scheme: light dark;
+    color: var(theme-color-font, #000);
+    background-color: var(--theme-color-background, #d9d9d9);
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --theme-color-background: #333;
+        --theme-color-font: #fff;
+    }
+}
