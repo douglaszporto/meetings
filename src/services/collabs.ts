@@ -8,7 +8,7 @@ interface CollabAPIResponse {
 }
 
 export const SaveCollab = (collabToSave: CollabItem) => {
-    return new Promise<CollabAPIResponse>((resolve, reject) => {
+    return new Promise<CollabAPIResponse>((resolve) => {
 
         try {
             let collabs = JSON.parse(localStorage.getItem("collabs") || "{}") as {[key:string]: CollabItem};
@@ -21,8 +21,8 @@ export const SaveCollab = (collabToSave: CollabItem) => {
                 data: collabToSave,
             });
         } catch (error:any) {
-            reject({
-                status: "success",
+            resolve({
+                status: "error",
                 error: error as Error,
             });
         }
@@ -30,7 +30,7 @@ export const SaveCollab = (collabToSave: CollabItem) => {
 }
 
 export const DeleteCollab = (collabToDelete: CollabItem) => {
-    return new Promise<CollabAPIResponse>((resolve, reject) => {
+    return new Promise<CollabAPIResponse>((resolve) => {
 
         try {
             let collabs = JSON.parse(localStorage.getItem("collabs") || "{}") as {[key:string]: CollabItem};
@@ -43,8 +43,8 @@ export const DeleteCollab = (collabToDelete: CollabItem) => {
                 data: collabToDelete,
             });
         } catch (error:any) {
-            reject({
-                status: "success",
+            resolve({
+                status: "error",
                 error: error as Error,
             });
         }
@@ -52,7 +52,7 @@ export const DeleteCollab = (collabToDelete: CollabItem) => {
 }
 
 export const GetCollabs = () => {
-    return new Promise<CollabAPIResponse>((resolve, reject) => {
+    return new Promise<CollabAPIResponse>((resolve) => {
 
         try {
             let collabs = JSON.parse(localStorage.getItem("collabs") || "{}") as {[key:string]: CollabItem};
@@ -61,8 +61,8 @@ export const GetCollabs = () => {
                 list: Object.values(collabs),
             });
         } catch (error:any) {
-            reject({
-                status: "success",
+            resolve({
+                status: "error",
                 error: error as Error,
             });
         }

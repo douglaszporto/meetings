@@ -13,6 +13,9 @@ import EventsByDay from './Calendar/EventByDay';
 const START_HOUR = 7;
 const END_HOUR = 19;
 
+export const minTime = dayjs().set('hour', START_HOUR).startOf('hour');
+export const maxTime = dayjs().set('hour', END_HOUR).endOf('hour');
+
 const hours = Array.from(new Array(END_HOUR-START_HOUR)).map((_, i) => i+START_HOUR);
 const hoursFormatted = ['', ...hours.map(h => h.toString().padStart(2, '0') + ':00')];
 

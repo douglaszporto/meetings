@@ -10,7 +10,7 @@ interface EventAPIResponse {
 }
 
 export const SaveEvent = (eventToSave: EventItem) => {
-    return new Promise<EventAPIResponse>((resolve, reject) => {
+    return new Promise<EventAPIResponse>((resolve) => {
 
         try {
             let events = JSON.parse(localStorage.getItem("events") || "{}") as {[key:string]: EventItem};
@@ -23,8 +23,8 @@ export const SaveEvent = (eventToSave: EventItem) => {
                 data: eventToSave,
             });
         } catch (error:any) {
-            reject({
-                status: "success",
+            resolve({
+                status: "error",
                 error: error as Error,
             });
         }
@@ -32,7 +32,7 @@ export const SaveEvent = (eventToSave: EventItem) => {
 }
 
 export const DeleteEvent = (eventToDelete: EventItem) => {
-    return new Promise<EventAPIResponse>((resolve, reject) => {
+    return new Promise<EventAPIResponse>((resolve) => {
 
         try {
             let events = JSON.parse(localStorage.getItem("events") || "{}") as {[key:string]: EventItem};
@@ -45,8 +45,8 @@ export const DeleteEvent = (eventToDelete: EventItem) => {
                 data: eventToDelete,
             });
         } catch (error:any) {
-            reject({
-                status: "success",
+            resolve({
+                status: "error",
                 error: error as Error,
             });
         }
@@ -54,7 +54,7 @@ export const DeleteEvent = (eventToDelete: EventItem) => {
 }
 
 export const GetEvents = () => {
-    return new Promise<EventAPIResponse>((resolve, reject) => {
+    return new Promise<EventAPIResponse>((resolve) => {
 
         try {
             let events = JSON.parse(localStorage.getItem("events") || "{}") as {[key:string]: EventItem};
@@ -67,8 +67,8 @@ export const GetEvents = () => {
                 }))
             });
         } catch (error:any) {
-            reject({
-                status: "success",
+            resolve({
+                status: "error",
                 error: error as Error,
             });
         }

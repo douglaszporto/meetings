@@ -9,6 +9,8 @@ import UploadButton from './Form/Upload';
 import CollabSelector from './Form/CollabSelector';
 import { useEvents } from '../contexts/events';
 import { CollabItem } from '../types/collab';
+import { minTime, maxTime} from './Calendar';
+
 
 interface FormProps {
     onClose?: () => void;
@@ -19,7 +21,7 @@ const Form: React.FC<FormProps> = ({onClose}:FormProps) => {
     const [dataTitle, setDataTitle] = React.useState<string>("");
     const [dataDate, setDataDate] = React.useState<Dayjs|null>(dayjs());
     const [dataTime, setDataTime] = React.useState<Dayjs|null>(dayjs());
-    const [dataDuration, setDataDuration] = React.useState<number>(1);
+    const [dataDuration, setDataDuration] = React.useState<string>("1");
     const [dataCollabs, setDataCollabs] = React.useState<CollabItem[]>([]);
     const [dataPhoto, setDataPhoto] = React.useState<string>();
     const [validationTitle, setValidationTitle] = React.useState<string>();
@@ -27,7 +29,6 @@ const Form: React.FC<FormProps> = ({onClose}:FormProps) => {
     const [validationTime, setValidationTime] = React.useState<string>();
     const [validationDuration, setValidationDuration] = React.useState<string>();
     const [validationCollabs, setValidationCollabs] = React.useState<string>();
-
 
     const { events, eventId, saveEvent, getEvents, deleteEvent } = useEvents();
 
@@ -48,13 +49,8 @@ const Form: React.FC<FormProps> = ({onClose}:FormProps) => {
     };
 
     const handleChangeDuration = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let input = parseFloat(event.target.value.replace(/\D/g, '') || '1');
+        let input = event.target.value.replace(/\D\./g, '');
         
-        if (input < 1) 
-            input = 1;
-        if (input > 12) 
-            input = 12;
-
         setDataDuration(input);
         setValidationDuration(undefined);
     };
@@ -71,18 +67,33 @@ const Form: React.FC<FormProps> = ({onClose}:FormProps) => {
     const handleSubmitForm = () => {
         setValidationTitle(dataTitle ? undefined : "Este campo é obrigatório");
         setValidationDate(dataDate ? undefined : "Este campo é obrigatório");
-        setValidationTime(dataTime ? undefined : "Este campo é obrigatório");
-        setValidationDuration(dataDuration ? undefined : "Este campo é obrigatório");
+        setValidationTime(dataTime ? undefined : "Obrigatório");
+        setValidationDuration(dataDuration ? undefined : "Obrigatório");
         setValidationCollabs(dataCollabs.length ? undefined : "Este campo é obrigatório");
 
-        if (!dataTitle || !dataDate || !dataTime || !dataCollabs.length) return;
+        const durationAsNumber = parseFloat(dataDuration ?? '0');
+
+        if (durationAsNumber > 12) {
+            setValidationDuration("Máx 12 horas");
+        }
+
+        if (!dataTitle || 
+            !dataDate || 
+            !dataTime ||
+            !dataDuration || 
+            durationAsNumber <= 0 ||
+            durationAsNumber > 12 ||
+            !dataCollabs.length ||
+            dataTime?.isAfter(maxTime, 'hour') ||
+            dataTime?.isBefore(minTime, 'hour')
+        ) return;
 
         saveEvent({
             id: eventId ?? uuid(),
             title: dataTitle,
             date: dataDate ?? dayjs(),
             time: dataTime ?? dayjs(),
-            duration: dataDuration ?? 1,
+            duration: durationAsNumber ?? 1,
             collabs: dataCollabs,
             photo: dataPhoto
         });
@@ -115,7 +126,7 @@ const Form: React.FC<FormProps> = ({onClose}:FormProps) => {
                 setDataTitle(event.title);
                 setDataDate(event.date);
                 setDataTime(event.time);
-                setDataDuration(event.duration);
+                setDataDuration(String(event.duration));
                 setDataCollabs(event.collabs);
                 setDataPhoto(event.photo);
             }
@@ -139,8 +150,8 @@ const Form: React.FC<FormProps> = ({onClose}:FormProps) => {
                 </Box> : null}
                 <TextField value={dataTitle} label="Objetivo" onChange={handleChangeTitle} helperText={validationTitle} error={Boolean(validationTitle)} />
                 <Stack direction="row" spacing={2}>
-                    <DatePicker value={dataDate} label="Data" onChange={handleChangeDate} sx={{flex:"3"}} />
-                    <TimePicker value={dataTime} label="Hora" onChange={handleChangeTime} sx={{flex:"2"}} />
+                    <DatePicker value={dataDate} label="Data" onChange={handleChangeDate} sx={{flex:"3"}} slotProps={{textField: {error: Boolean(validationDate), helperText: validationDate}}} />
+                    <TimePicker value={dataTime} minTime={minTime} maxTime={maxTime} label="Hora" onChange={handleChangeTime} sx={{flex:"2"}} slotProps={{textField: {error: Boolean(validationTime), helperText: validationTime}}} />
                     <TextField value={dataDuration} label="Duração" sx={{flex:"2"}} InputProps={{endAdornment: <InputAdornment position="end">horas</InputAdornment>,}} helperText={validationDuration} error={Boolean(validationDuration)} onChange={handleChangeDuration} />
                 </Stack>
                 <CollabSelector onChange={handleChangeCollabs} value={dataCollabs} error={validationCollabs} />
