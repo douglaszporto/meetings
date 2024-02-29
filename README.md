@@ -8,7 +8,7 @@ Após isto, segui para o react, utilizando Typescript e Vite para a estrutura e 
 
 O armazenamento dos dados está em localStorage (devido à simplicidade) e inicialmente não há dados pré cadastrados.
 
-Os dados são compartilhados entre componentes pelo Context API. Cogitei a possibilidade de utilizar Redux, porém, como foi mencionado explicitamente a Context API, optei por seguir nesta linha.
+Os dados são compartilhados entre componentes pelo Context API. Cogitei a possibilidade de utilizar Redux, porém, como foi mencionado explicitamente o Context API, optei por seguir nesta linha.
 
 Para rodar o projeto:
 ```
@@ -21,7 +21,7 @@ Para visualizar o resultado, basta acessar o navegor em [http://localhost:5173//
 
 ## Funcionalidades
 
-Conforma solicitado, as principais funcionalidades são:
+Conforme solicitado, as principais funcionalidades são:
 
 * Cadastro (Visualização/Inclusão/Alteração/Remoção) de eventos na agenda
 * Cadastro (Inclusão/Alteração/Remoção) de colaboradores (nome e cor de preferencia)
