@@ -23,9 +23,27 @@ body {
     min-height: 100vh;
 }
 
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+      
+*::-webkit-scrollbar-track {
+    background-color: transparent
+}
+      
+*::-webkit-scrollbar {
+    width: 6px;
+    background-color: rgba(255, 255, 255, 0.2) transparent;
+}
+      
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
 @media (prefers-color-scheme: dark) {
     :root {
-        --theme-color-background: #333;
+        --theme-color-background: #222;
         --theme-color-font: #fff;
     }
 }
